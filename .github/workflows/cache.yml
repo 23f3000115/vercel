@@ -1,0 +1,32 @@
+name: CI Cache Example
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: cache-237497d
+
+      - name: prime-cache-237497d
+        run: echo "Cache status: ${{ steps.cache.outputs.cache-hit }}"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt || true
